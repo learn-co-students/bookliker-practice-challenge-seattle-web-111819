@@ -12,7 +12,7 @@ const getBooks = () => {
   .then(json => showBooks(json))
 }
 
-//iterate over the array of books and create an li element for each
+//iterate over the array of books and send each to the next function: create an li element for each
 const showBooks = booksArray => {
   booksArray.forEach(book => createBookLi(book))
 }
@@ -79,12 +79,13 @@ const bookDetails = book => {
 }
 
 // patch method, update array of likers with current liker
+// .push() returns the count, need to refer to original array after adding one to the list
 const likeBook = (book, e) => {
   console.log("existing array of likers:")
   console.log(usersWhoLiked = book.users)
   console.log("new array of likers:")
   console.log(usersWhoLikedPlusMe = usersWhoLiked.push(currentUser))
-  
+
   fetch(`http://localhost:3000/books/${book.id}`, {
     method: "PATCH",
     headers: {
