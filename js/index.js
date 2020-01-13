@@ -36,7 +36,13 @@ const bookDetails = book => {
 
   //create title h1, image div, description p, user p
 
- 
+  let showPanel = document.getElementById('show-panel')
+  console.log(showPanel)
+  while (showPanel.firstChild) {
+    showPanel.removeChild(showPanel.firstChild)
+  }
+
+
   let h1 = document.createElement('h1')
   h1.innerText = book.title
 
@@ -69,7 +75,7 @@ const bookDetails = book => {
     // console.log(e.target.parentNode.users)
   })
  
-  let showPanel = document.getElementById('show-panel')
+  
   showPanel.appendChild(h1)
   showPanel.appendChild(image)
   showPanel.appendChild(pDescription)
@@ -88,6 +94,7 @@ const likeBook = (book, e) => {
   console.log(usersWhoLikedPlusMe = usersWhoLiked.push(currentUser))
 
 
+
   fetch(`http://localhost:3000/books/${book.id}`, {
     method: "PATCH",
     headers: {
@@ -95,11 +102,11 @@ const likeBook = (book, e) => {
       "Accept": "application/json"
     },
     body: JSON.stringify({
-      "users": usersWhoLikedPlusMe
+      "users": usersWhoLiked
     })
     })
     .then(res => res.json())
-    .then(data => bookDetails(book))
+    .then(json => bookDetails(book))
 }
 
 
