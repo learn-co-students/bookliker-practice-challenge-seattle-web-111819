@@ -1,3 +1,5 @@
+let currentUser = {id: 1, username: "pouros"}
+
 document.addEventListener("DOMContentLoaded", function() {
   getBooks()
 });
@@ -34,45 +36,58 @@ const bookDetails = book => {
 
   //create title h1, image div, description p, user p
 
+ 
   let h1 = document.createElement('h1')
   h1.innerText = book.title
 
+
   let image = document.createElement('img')
   image.src = book.img_url
-
+ 
   let pDescription = document.createElement('p')
   pDescription.innerText = book.description
+ 
 
   let usersDiv = document.createElement('div')
   usersDiv.innerText ="USERS THAT LIKE THIS BOOK:"
+  
 
+  console.log(book)
   book.users.forEach(user => {
+    
     userP = document.createElement('p')
     userP.innerText = user.username
     //userP.style.listStyleType = "none"
     usersDiv.appendChild(userP)
   })
-
+  
   let readButton = document.createElement('button')
   readButton.innerText = "Read Book"
   readButton.addEventListener("click", e => {
     e.preventDefault()
-    likeBook(book)
-    console.log(book)
+    likeBook(book, e)
+    // console.log(e.target.parentNode.users)
   })
-
+ 
   let showPanel = document.getElementById('show-panel')
   showPanel.appendChild(h1)
   showPanel.appendChild(image)
   showPanel.appendChild(pDescription)
   showPanel.appendChild(usersDiv)
+  // console.log(book.users)
   showPanel.appendChild(readButton)
-
+  
 }
 
 // need to fix POST method
 // add current user ID to existing users/likers array and re-render the show-panel to reflect new changes with current user's ID included in list
-const likeBook = book => {
+const likeBook = (book, e) => {
+  console.log("existing array of likers:")
+  console.log(usersWhoLiked = book.users)
+  console.log("new array of likers:")
+  console.log(usersWhoLikedPlusMe = usersWhoLiked.push(currentUser))
+
+
   fetch(`http://localhost:3000/books/${book.id}`, {
     method: "PATCH",
     headers: {
@@ -80,11 +95,11 @@ const likeBook = book => {
       "Accept": "application/json"
     },
     body: JSON.stringify({
-      "users": book.users
+      "users": usersWhoLikedPlusMe
     })
     })
     .then(res => res.json())
-    .then(data => console.log(book.users))
+    .then(data => bookDetails(book))
 }
 
 
