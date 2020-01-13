@@ -1,61 +1,44 @@
-let myUser = {id:1, username:"pouros"}
+let myUser = {"id":1, "username":"pouros"}
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Page Loaded!");
   fetchBooks();
 });
 
 const fetchBooks = () => {
   fetch('http://localhost:3000/books')
-    .then (res => res.json())
-    .then (json => showBooks(json))
+  .then(res => res.json())
+  .then(json => showBooks(json))
 }
 
 const showBooks = booksArray => {
   booksArray.forEach(book => {
-    addBooks(book)
+    createBookList(book)
   })
 }
 
-const addBooks = book => {
+const createBookList = book => {
   let bookLi = document.createElement('li')
   bookLi.innerText = book.title
-
-  bookLi.addEventListener("click", e => {
-    e.preventDefault()
-    showIndividualBook(book)
-
+  bookLi. addEventListener("click", e => {
+  
+    showIndividualBook(book);
   })
 
   let list = document.getElementById("list")
-  list.appendChild(bookLi)
+  list.appendChild(bookLi);
 }
 
 const showIndividualBook = book => {
-  let showPanel = document.getElementById('show-panel') 
-  
-  while (showPanel.firstChild) {
-    showPanel.removeChild(showPanel.firstChild)
-  }
-
-
-
-  let div = document.createElement('div')
-  let title = document.createElement('h3')
-  title.innerText = book.title
+  let bookDiv = document.createElement('div')
+  let titleh3 = document.createElement('h3')
   let description = document.createElement('p')
-  description.innerText = book.description
   let img = document.createElement('img')
-  img.src = book.img_url
-
-  let divB = document.createElement('div')
-  let button = document.createElement('button')
-  button.innerText = "Like Book"
-  divB.appendChild(button)
-  button.addEventListener("click", () => {
-
-    likeBook(book);
-  })
-
+  let likeButton = document.createElement('button')
+  let likeDiv = document.createElement('div')
+  
+  
+  
   let userUl = document.createElement('ul')
   book.users.forEach(user => {
     let userLi = document.createElement('li')
@@ -63,18 +46,28 @@ const showIndividualBook = book => {
     userUl.appendChild(userLi)
   })
 
+  titleh3.innerText = book.title
+  description.innerText = book.description
+  img.src = book.img_url
+  likeButton.innerText = "Like Book"
+  likeButton.addEventListener("click", e => {
+    likeBook(book);
+  })
 
-  div.appendChild(title)
-  div.appendChild(description)
-  div.appendChild(img)
-  div.appendChild(divB)
-  div.appendChild(userUl)
+
+  bookDiv.appendChild(titleh3)
+  bookDiv.appendChild(description)
+  bookDiv.appendChild(img)
+  likeDiv.appendChild(likeButton)
+  bookDiv.appendChild(likeDiv)
+  bookDiv.appendChild(userUl)
 
 
+  let showPanel = document.getElementById("show-panel")
 
-  showPanel.appendChild(div)
+  showPanel.replaceWith(bookDiv)
+  bookDiv.id = "show-panel"
 
- 
 }
 
 const likeBook = book => {
